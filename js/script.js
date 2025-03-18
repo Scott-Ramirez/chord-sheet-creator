@@ -59,7 +59,7 @@ function activarBotonesAcordes(section) {
 function agregarRepeticion() {
     const repeatContainer = document.getElementById("repeat-sections");
     const newRepeat = document.createElement("div");
-    newRepeat.classList.add("card", "p-3", "mb-3", "w-50", "mx-auto");
+    newRepeat.classList.add("card", "p-3", "mb-3", "mx-auto");
 
     newRepeat.innerHTML = `
         <label class="fw-bold">Parte a Repetir:</label>
