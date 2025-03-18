@@ -1,0 +1,58 @@
+/* Splash Screen */
+#splash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #09906F; /* Color de fondo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+}
+
+.splash-content {
+    text-align: center;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+.splash-content h2 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+    margin-top: 10px;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Ocultar splash después de la carga */
+#splash.hide {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+}
+
+
+.splash-logo {
+    width: 120px; /* Ajusta el tamaño del logo */
+    height: auto;
+    margin-bottom: 15px;
+    animation: fadeIn 1.5s ease-in-out;
+    border-radius: 50%  ;
+}

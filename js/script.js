@@ -1,18 +1,59 @@
+const acordes = ["C", "Cm", "C#", "C#m", "D", "Dm", "D#", "D#m", "E", "Em", "F", "Fm", 
+    "F#", "F#m", "G", "Gm", "G#", "G#m", "A", "Am", "A#", "A#m", "B", "Bm", "Ab", "Eb"];
+
 function agregarSeccion() {
     const sectionContainer = document.getElementById("sections");
     const newSection = document.createElement("div");
-    newSection.classList.add("card", "p-3", "mb-3", "w-50", "mx-auto");
+    newSection.classList.add("card", "p-3", "mb-3");
+
+    const acordeButtons = acordes.map(acorde => `
+        <button type="button" class="btn btn-outline-primary btn-sm m-1 acorde-btn" data-acorde="${acorde}">
+            ${acorde}
+        </button>
+    `).join("");
 
     newSection.innerHTML = `
         <label class="fw-bold">Sección:</label>
         <input type="text" class="form-control section-title" placeholder="Ejemplo: VOZ 1">
-        <textarea class="form-control section-notes mt-2" rows="2" placeholder="Ejemplo: Cm - Bb - F"></textarea>
+
+        <label class="fw-bold mt-2">Selecciona los acordes:</label>
+        <div class="d-flex flex-wrap">
+            ${acordeButtons}
+        </div>
+
+        <input type="text" class="form-control section-notes mt-2" placeholder="Acordes seleccionados" readonly>
+
         <button class="btn btn-danger btn-sm mt-2" onclick="eliminarSeccion(this)">
             <i class="bi bi-trash"></i> Eliminar
         </button>
     `;
 
     sectionContainer.appendChild(newSection);
+    activarBotonesAcordes(newSection);
+}
+
+function activarBotonesAcordes(section) {
+    const botones = section.querySelectorAll(".acorde-btn");
+    const inputAcordes = section.querySelector(".section-notes");
+
+    botones.forEach(boton => {
+        boton.addEventListener("click", () => {
+            let acorde = boton.getAttribute("data-acorde");
+            let acordesSeleccionados = inputAcordes.value.split("-").filter(a => a.trim() !== "");
+
+            if (acordesSeleccionados.includes(acorde)) {
+                acordesSeleccionados = acordesSeleccionados.filter(a => a !== acorde);
+                boton.classList.remove("btn-primary");
+                boton.classList.add("btn-outline-primary");
+            } else {
+                acordesSeleccionados.push(acorde);
+                boton.classList.remove("btn-outline-primary");
+                boton.classList.add("btn-primary");
+            }
+
+            inputAcordes.value = acordesSeleccionados.join("-");
+        });
+    });
 }
 
 function agregarRepeticion() {
@@ -32,13 +73,13 @@ function agregarRepeticion() {
 }
 
 function eliminarSeccion(button) {
-    button.parentElement.remove();
+    button.closest(".card").remove();
 }
 
 function generarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    let y = 30; 
+    let y = 30;
 
     const titulo = document.getElementById("titulo").value.trim();
     if (!titulo) {
@@ -71,7 +112,7 @@ function generarPDF() {
 
         if (sectionNotes) {
             doc.setFont("helvetica", "normal");
-            doc.text(sectionNotes, 105, y, { align: "center" });
+            doc.text(sectionNotes.replace(/\s/g, "-"), 105, y, { align: "center" }); // Separador por "-"
             y += 12;
         }
     });
